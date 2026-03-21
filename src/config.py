@@ -1,7 +1,9 @@
 import argparse
 
+
 def csv_list(string):
-    return string.split(',')
+    return string.split(",")
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="GraphCheck")
@@ -9,7 +11,7 @@ def parse_args():
     parser.add_argument("--seed", type=int, default=0)
 
     # Training Dataset
-    parser.add_argument("--train_dataset", type=str, default='MiniCheck_Train')
+    parser.add_argument("--train_dataset", type=str, default="MiniCheck_Train")
 
     # Model Training
     parser.add_argument("--batch_size", type=int, default=8)
@@ -22,19 +24,26 @@ def parse_args():
 
     # Inference
     parser.add_argument("--eval_batch_size", type=int, default=8)
-    parser.add_argument('--dataset_name', type=str, default='Check', help='Name of the dataset')
+    parser.add_argument(
+        "--dataset_name", type=str, default="Check", help="Name of the dataset"
+    )
 
     # LLM related
-    parser.add_argument("--llm_model_name", type=str, default='llama_70b')
-    parser.add_argument("--llm_model_path", type=str, default='')
+    parser.add_argument("--llm_model_name", type=str, default="llama_70b")
+    parser.add_argument(
+        "--llm_model_path",
+        type=str,
+        default="",
+        help="Optional local HuggingFace model directory that overrides the default repo id for the selected model name",
+    )
     parser.add_argument("--llm_num_virtual_tokens", type=int, default=4)
-    parser.add_argument("--output_dir", type=str, default='output')
+    parser.add_argument("--output_dir", type=str, default="output")
     parser.add_argument("--max_txt_len", type=int, default=1024)
     parser.add_argument("--max_new_tokens", type=int, default=5)
     parser.add_argument("--max_memory", type=csv_list, default=[80, 80])
 
     # GNN related
-    parser.add_argument("--gnn_model_name", type=str, default='gat')
+    parser.add_argument("--gnn_model_name", type=str, default="gat")
     parser.add_argument("--gnn_num_layers", type=int, default=3)
     parser.add_argument("--gnn_in_dim", type=int, default=1024)
     parser.add_argument("--gnn_hidden_dim", type=int, default=1024)

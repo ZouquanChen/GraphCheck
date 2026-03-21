@@ -7,11 +7,12 @@ import json
 import pandas as pd
 from dataset.utils.dataset import KGDataset
 from src.config import parse_args
-from model import model_path
+from model import resolve_llm_model_path
 from src.ckpt import _reload_best_model
 from src.utils import get_accuracy, seed_everything
 from dataset.utils.collate import collate_fn
 from model.graphcheck import GraphCheck
+
 
 def main(args):
 
@@ -21,16 +22,25 @@ def main(args):
 
     # Data loader
     dataset = KGDataset(args.dataset_name)
-    test_loader = DataLoader(dataset, batch_size=args.eval_batch_size, drop_last=False, pin_memory=True, shuffle=False, collate_fn=collate_fn)
+    test_loader = DataLoader(
+        dataset,
+        batch_size=args.eval_batch_size,
+        drop_last=False,
+        pin_memory=True,
+        shuffle=False,
+        collate_fn=collate_fn,
+    )
 
     # Build Model
-    args.llm_model_path = model_path[args.llm_model_name]
+    args.llm_model_path = resolve_llm_model_path(
+        args.llm_model_name, args.llm_model_path
+    )
     model = GraphCheck(args=args)
 
     # Evaluating
-    os.makedirs(f'{args.output_dir}/{args.project}', exist_ok=True)
-    path = f'{args.output_dir}/{args.project}/{args.dataset_name}.csv'
-    print(f'path: {path}')
+    os.makedirs(f"{args.output_dir}/{args.project}", exist_ok=True)
+    path = f"{args.output_dir}/{args.project}/{args.dataset_name}.csv"
+    print(f"path: {path}")
 
     # Load Model Weights
     model = _reload_best_model(model, args)
@@ -48,7 +58,7 @@ def main(args):
 
     # Evaluating
     bacc = get_accuracy(path)
-    print(f'Test BAcc: {bacc}')
+    print(f"Test BAcc: {bacc}")
 
 
 if __name__ == "__main__":

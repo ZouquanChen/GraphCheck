@@ -6,3 +6,8 @@ model_path = {
     "llama_8b": "meta-llama/Meta-Llama-3-8B-Instruct",
 }
 
+
+def resolve_llm_model_path(llm_model_name, llm_model_path=""):
+    if llm_model_path and llm_model_path.strip():
+        return llm_model_path
+    return model_path[llm_model_name]
