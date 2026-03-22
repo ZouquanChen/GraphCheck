@@ -61,12 +61,16 @@ class KGDataset(Dataset):
         # 将 prompt、claim 和 document 拼成最终送入 LLM 的文本输入。
         text = f"{self.prompt}\nClaim: {claim}\nDocument: {doc}"
         # 读取当前样本对应的 claim 图对象。
+        # weights_only=False 是因为 .pt 文件包含 PyG 的 DataEdgeAttr 等非标量对象，
+        # 且这些文件来自本地预处理流程，可信来源，因此禁用安全限制。
         claim_kg = torch.load(
-            f"{PATH}/extracted_KG/{self.dataset_name}/graphs/claim/{index}.pt"
+            f"{PATH}/extracted_KG/{self.dataset_name}/graphs/claim/{index}.pt",
+            weights_only=False,
         )
         # 读取当前样本对应的 doc 图对象。
         doc_kg = torch.load(
-            f"{PATH}/extracted_KG/{self.dataset_name}/graphs/doc/{index}.pt"
+            f"{PATH}/extracted_KG/{self.dataset_name}/graphs/doc/{index}.pt",
+            weights_only=False,
         )
         # 将数值标签映射成训练时需要的自然语言标签。
         if label == 1:
